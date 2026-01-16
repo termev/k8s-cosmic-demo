@@ -1,9 +1,95 @@
 <!DOCTYPE html>
 <html>
-<head><title>Kingdee Cosmic Demo</title></head>
+<head>
+    <title>Kingdee Cosmic Microservice Demo</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 50px; background-color: #f4f4f9; }
+        h1 { color: #333; }
+        .container { display: flex; justify-content: center; gap: 50px; margin-top: 40px; }
+        .box { 
+            border: 1px solid #ddd; 
+            padding: 30px; 
+            width: 300px; 
+            background: white; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            transition: transform 0.3s;
+        }
+        .box:hover { transform: translateY(-5px); }
+        .arrow { font-size: 40px; align-self: center; color: #888; }
+        button { 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 5px;
+            cursor: pointer; 
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #0056b3; }
+        #result { 
+            margin-top: 20px; 
+            font-weight: bold; 
+            color: #28a745; 
+            min-height: 24px;
+        }
+        .status-badge {
+            background: #e6f4ea;
+            color: #1e7e34;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
 <body>
-    <h1 style="color:red;">Version 2.0</h1>
-    <p>DevOps Pipeline is SUCCESS!</p>
-    <p>Running on K3s & Jofool's Repo</p>
+    <h1>🚀 金蝶苍穹微服务演示平台 V3.0</h1>
+    <p>DevOps + Microservices Architecture</p>
+    
+    <div class="container">
+        <div class="box">
+            <h3>🖥️ 前端服务 (Frontend)</h3>
+            <p><span class="status-badge">🟢 运行中</span></p>
+            <p style="color: #666; font-size: 0.9em;">负责展示界面 & 发起调用</p>
+        </div>
+
+        <div class="arrow">➡️</div>
+
+        <div class="box">
+            <h3>⚙️ 薪酬核心 (Backend)</h3>
+            <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">负责计算逻辑 & 数据返回</p>
+            <button onclick="checkSalary()">查询工资余额</button>
+            <div id="result">等待调用...</div>
+        </div>
+    </div>
+
+    <script>
+        function checkSalary() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerText = "⏳ 正在通过内网呼叫后端...";
+            resultDiv.style.color = "#orange";
+
+            // 🌟 微服务核心逻辑：
+            // 我们请求的是当前域名的 /api 路径
+            // Ingress 网关会拦截这个请求，把它转发给后端的 salary-api 服务
+            fetch('/api')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("网络响应异常 (Status: " + response.status + ")");
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    resultDiv.innerText = data;
+                    resultDiv.style.color = "#28a745"; // 绿色表示成功
+                })
+                .catch(error => {
+                    resultDiv.innerText = "❌ 调用失败: " + error;
+                    resultDiv.style.color = "red";
+                });
+        }
+    </script>
 </body>
 </html>
