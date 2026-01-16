@@ -23,4 +23,4 @@ jobs:
           context: .
           push: true
           # 下面这行：把 <你的DockerHub用户名> 换成你真实的用户名
-          tags: Jovial/k8s-cosmic-demo:latest
+          tags: jofool/k8s-cosmic-demo:latest
